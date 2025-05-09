@@ -2,14 +2,12 @@ package com.example.taskmanager.controller;
 
 import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
-import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController //데이터를 json형태로 사용
 @RequestMapping("/api")   //prefix하는 url 사용 시 설정
@@ -37,8 +35,8 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{taskId}")
-    public ResponseEntity<TaskResponseDto> readTask(@PathVariable Long taskId){
-        return new ResponseEntity<>(taskService.readTask(taskId), HttpStatus.OK);
+    public ResponseEntity<TaskResponseDto> readTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto){
+        return new ResponseEntity<>(taskService.readTask(taskId, taskRequestDto), HttpStatus.OK);
     }
 
     @PutMapping("/tasks/{taskId}")
@@ -48,8 +46,8 @@ public class TaskController {
     }
 
     @DeleteMapping("/tasks/{taskId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
-        taskService.deleteTask(taskId);
+    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto) {
+        taskService.deleteTask(taskId, taskRequestDto);
         return ResponseEntity.noContent().build();
     }
 

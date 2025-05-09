@@ -5,8 +5,14 @@ import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.repository.TaskRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +20,13 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    public TaskService(TaskRepository taskRepository){
+    private final JdbcTemplate jdbcTemplate;
+
+    public TaskService(TaskRepository taskRepository, DataSource dataSource){
         this.taskRepository = taskRepository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
 
     public TaskResponseDto saveTask(TaskRequestDto taskRequestDto){
         Task requestTask = new Task(taskRequestDto);
@@ -32,19 +42,28 @@ public class TaskService {
         return taskRepository.readAllTasks().stream().map(t -> new TaskResponseDto(t.getTaskId(), t.getName(), t.getTasks(), t.getPostDate())).collect(Collectors.toList());
     }
 
-    public TaskResponseDto readTask(Long taskId){
-        Task requestTask = taskRepository.readTask(taskId);
+    public TaskResponseDto readTask(Long taskId, TaskRequestDto taskRequestDto){
+        String checkPassword = jdbcTemplate.queryForObject("select password from schedule where taskId = ?", String.class, taskId);
+        if(!taskRequestDto.getPassword().equals(checkPassword)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not match password =" + taskId);
+        }
 
+        Task requestTask = taskRepository.readTask(taskId);
+        TaskResponseDto responseTask = new TaskResponseDto(requestTask);
         if(requestTask == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id =" + taskId);
         }
 
-        TaskResponseDto responseTask = new TaskResponseDto(requestTask);
         return responseTask;
     }
 
     //수정
     public TaskResponseDto update(Long taskId, TaskRequestDto taskRequestDto) {
+        String checkPassword = jdbcTemplate.queryForObject("select password from schedule where taskId = ?", String.class, taskId);
+        if(!taskRequestDto.getPassword().equals(checkPassword)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not match password =" + taskId);
+        }
+
         if(taskRequestDto.getName() == null || taskRequestDto.getTasks() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The name and tasks are required values.");
         int updatedRow = taskRepository.updateTask(taskId, taskRequestDto);
@@ -53,10 +72,16 @@ public class TaskService {
 
         Task requestTask = taskRepository.readTask(taskId);
         TaskResponseDto responseTask = new TaskResponseDto(requestTask);
+
         return responseTask;
     }
 
-    public void deleteTask(Long taskId) {
+    public void deleteTask(Long taskId, TaskRequestDto taskRequestDto) {
+        String checkPassword = jdbcTemplate.queryForObject("select password from schedule where taskId = ?", String.class, taskId);
+        if(!taskRequestDto.getPassword().equals(checkPassword)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not match password =" + taskId);
+        }
+
         // task 삭제
         int deletedRow = taskRepository.deleteTask(taskId);
         // 삭제된 row가 0개 라면
@@ -65,5 +90,7 @@ public class TaskService {
         }
 
     }
+
+
 
 }
