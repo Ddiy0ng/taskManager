@@ -1,25 +1,24 @@
 package com.example.taskmanager.dto;
 
 import com.example.taskmanager.entity.Task;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class TaskResponseDto {
-    private Long id;
+    private Long taskId;
     private String name;
     private String tasks;
     private Timestamp postDate;
 
+    public TaskResponseDto(Task requestTask) {
+        this.taskId = requestTask.getTaskId();
+        this.name = requestTask.getName();
+        this.tasks = requestTask.getTasks();
+        this.postDate = requestTask.getPostDate();
 
-    public TaskResponseDto(long id, String name, String tasks, Timestamp postDate) {
-        this.id = id;
-        this.name = name;
-        this.tasks = tasks;
-        this.postDate = postDate;
     }
 }
