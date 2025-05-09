@@ -37,10 +37,5 @@ public class Task {
         postDate = new Timestamp(System.currentTimeMillis());
     }
 
-    public void update(String password, String name, String tasks) {
-        this.name = name;
-        this.tasks = tasks;
-        this.postDate = new Timestamp(System.currentTimeMillis());
-    }
 
 }
