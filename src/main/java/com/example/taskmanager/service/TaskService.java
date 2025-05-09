@@ -5,22 +5,15 @@ import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.repository.TaskRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service        //@Component와 동일, SpringBean으로 등록한다는 뜻
 public class TaskService {
 
     private final TaskRepository taskRepository;
-
     public TaskService(TaskRepository taskRepository){
         this.taskRepository = taskRepository;
     }
@@ -50,7 +43,18 @@ public class TaskService {
         return responseTask;
     }
 
+    //수정
+    public TaskResponseDto update(Long taskId, TaskRequestDto taskRequestDto) {
+        if(taskRequestDto.getName() == null || taskRequestDto.getTasks() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The name and tasks are required values.");
+        int updatedRow = taskRepository.updateTask(taskId, taskRequestDto);
+        if(updatedRow == 0)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
 
+        Task requestTask = taskRepository.readTask(taskId);
+        TaskResponseDto responseTask = new TaskResponseDto(requestTask);
+        return responseTask;
+    }
 
     public void deleteTask(Long taskId) {
         // task 삭제

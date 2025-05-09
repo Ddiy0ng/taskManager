@@ -2,6 +2,7 @@ package com.example.taskmanager.controller;
 
 import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
+import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +41,11 @@ public class TaskController {
         return new ResponseEntity<>(taskService.readTask(taskId), HttpStatus.OK);
     }
 
-
-
-
-
+    @PutMapping("/tasks/{taskId}")
+    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto){
+        TaskResponseDto taskResponseDto = taskService.update(taskId, taskRequestDto);
+        return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
+    }
 
     @DeleteMapping("/tasks/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
