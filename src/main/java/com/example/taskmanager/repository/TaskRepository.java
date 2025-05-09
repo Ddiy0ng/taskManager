@@ -1,4 +1,5 @@
 package com.example.taskmanager.repository;
+import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.entity.Task;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,7 +16,6 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository        //@Component와 동일, SpringBean으로 등록한다는 뜻
 public class TaskRepository {
@@ -64,11 +64,11 @@ public class TaskRepository {
         }
     }
 
-
-
-
-
-
+    public int updateTask(Long taskId, TaskRequestDto taskRequestDto){
+        String name = taskRequestDto.getName();
+        String tasks = taskRequestDto.getTasks();
+        return jdbcTemplate.update("update schedule set name = ?, tasks = ? where taskId = ?", name, tasks, taskId);
+    }
 
     public int deleteTask(Long taskId) {
         // 쿼리의 영향을 받은 row 수를 int로 반환한다.
