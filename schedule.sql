@@ -14,7 +14,9 @@ CREATE TABLE schedule(
         COMMENT '일정',
     postDate TIMESTAMP
         DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP
-        COMMENT '작성일시'
+        COMMENT '작성일시',
+    updateDate TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP
+        COMMENT '최종 수정일시'
 );
 

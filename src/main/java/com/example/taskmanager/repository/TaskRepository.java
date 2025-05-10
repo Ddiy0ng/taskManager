@@ -33,6 +33,8 @@ public class TaskRepository {
         // Insert: 데이터 저장 시 사용
         // insert query를 문자열로 작성하지 않아도 됨
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+
         //task 테이블에 insert할 것임
         //usingGeneratedKeyColums: 테이블의 키 값 설정
         jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("taskId");
@@ -41,7 +43,8 @@ public class TaskRepository {
         parameters.put("password", task.getPassword());
         parameters.put("name", task.getName());
         parameters.put("tasks", task.getTasks());
-        parameters.put("postDate", new Timestamp(System.currentTimeMillis()));
+        parameters.put("postDate", currentDate);
+        parameters.put("updateDate", currentDate);
 
         // insert하면 식별자가 autoIncrement로 생성이 됨. 저장 후 생성된 key 값을 number 타입으로 반환
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
@@ -51,14 +54,14 @@ public class TaskRepository {
     }
 
     public List<Task> readAllTasks() {
-        List<Task> resultTasks = jdbcTemplate.query("select * from schedule", taskRowMapper());
-        return resultTasks;
+        List<Task> taskList = jdbcTemplate.query("select * from schedule", taskRowMapper());
+        return taskList;
     }
 
     public Task readTask(Long taskId){
         try{
-            Task resultTask = jdbcTemplate.queryForObject("select * from schedule where taskId = ?", taskRowMapper(), taskId);
-            return resultTask;
+            Task readTask = jdbcTemplate.queryForObject("select * from schedule where taskId = ?", taskRowMapper(), taskId);
+            return readTask;
         }catch(EmptyResultDataAccessException e){
             return null;
         }
@@ -67,7 +70,8 @@ public class TaskRepository {
     public int updateTask(Long taskId, TaskRequestDto taskRequestDto){
         String name = taskRequestDto.getName();
         String tasks = taskRequestDto.getTasks();
-        return jdbcTemplate.update("update schedule set name = ?, tasks = ? where taskId = ?", name, tasks, taskId);
+        Timestamp updateDate = new Timestamp(System.currentTimeMillis());
+        return jdbcTemplate.update("update schedule set name = ?, tasks = ?, updateDate = ? where taskId = ?", name, tasks, updateDate, taskId);
     }
 
     public int deleteTask(Long taskId) {
@@ -83,24 +87,10 @@ public class TaskRepository {
                         rs.getLong("taskId"),
                         rs.getString("name"),
                         rs.getString("tasks"),
-                        rs.getTimestamp("postDate")
+                        rs.getTimestamp("postDate"),
+                        rs.getTimestamp("updateDate")
                 );
             }
         };
     }
-    /*
-    private RowMapper<TaskResponseDto> taskRowMapper(){
-        return new RowMapper<TaskResponseDto>() {
-            @Override
-            public TaskResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new TaskResponseDto(
-                        rs.getLong("taskId"),
-                        rs.getString("name"),
-                        rs.getString("tasks"),
-                        rs.getTimestamp("postDate")
-                );
-            }
-        };
-    }
-*/
 }

@@ -36,12 +36,13 @@ public class TaskController {
 
     @GetMapping("/tasks/{taskId}")
     public ResponseEntity<TaskResponseDto> readTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto){
-        return new ResponseEntity<>(taskService.readTask(taskId, taskRequestDto), HttpStatus.OK);
+        TaskResponseDto taskResponseDto = taskService.readTask(taskId, taskRequestDto);
+        return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
     }
 
     @PutMapping("/tasks/{taskId}")
     public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto){
-        TaskResponseDto taskResponseDto = taskService.update(taskId, taskRequestDto);
+        TaskResponseDto taskResponseDto = taskService.updateTask(taskId, taskRequestDto);
         return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
     }
 
