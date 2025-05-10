@@ -54,7 +54,7 @@ public class TaskRepository {
     }
 
     public List<Task> readAllTasks() {
-        List<Task> taskList = jdbcTemplate.query("select * from schedule", taskRowMapper());
+        List<Task> taskList = jdbcTemplate.query("select * from schedule order by updateDate desc", taskRowMapper());
         return taskList;
     }
 
