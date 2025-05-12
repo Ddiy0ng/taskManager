@@ -9,29 +9,24 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Task {
     //일정 객체
     private Long taskId;
     private String password;
-    private String name;
+    private String userId;
+    private String userName;
     private String tasks;
     private Timestamp postDate;
     private Timestamp updateDate;
 
-    public Task(long taskId, String name, String tasks, Timestamp postDate, Timestamp updateDate) {
+    public Task(long taskId, String userName, String tasks, Timestamp postDate, Timestamp updateDate){
         this.taskId = taskId;
-        this.name = name;
+        this.userName = userName;
         this.tasks = tasks;
         this.postDate = postDate;
         this.updateDate = updateDate;
-    }
 
-    //서비스의 저장용
-    public Task(TaskRequestDto taskRequestDto) {
-        this.password = taskRequestDto.getPassword();
-        this.name = taskRequestDto.getName();
-        this.tasks = taskRequestDto.getTasks();
     }
-
 
 }

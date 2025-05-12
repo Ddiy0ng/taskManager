@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor //조회 시
 public class TaskResponseDto {
     private Long taskId;
-    private String name;
+    private String userName;
     private String tasks;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Timestamp postDate;
@@ -19,11 +19,11 @@ public class TaskResponseDto {
     private Timestamp updateDate;
 
     //dto 반환
-    public TaskResponseDto(Task requestTask) {
-        this.taskId = requestTask.getTaskId();
-        this.name = requestTask.getName();
-        this.tasks = requestTask.getTasks();
-        this.postDate = requestTask.getPostDate();
-        this.updateDate = requestTask.getUpdateDate();
+    public TaskResponseDto(Task task) {
+        this.taskId = task.getTaskId();
+        this.userName = task.getUserName();
+        this.tasks = task.getTasks();
+        this.postDate = task.getPostDate();
+        this.updateDate = task.getUpdateDate();
     }
 }

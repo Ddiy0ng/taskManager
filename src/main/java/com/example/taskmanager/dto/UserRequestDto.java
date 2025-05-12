@@ -3,14 +3,18 @@ package com.example.taskmanager.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
-public class TaskRequestDto {
+public class UserRequestDto {
     @NotBlank
-    private String password;
+    private String userName;
     @NotBlank
-    private String tasks;
+    @Email
+    private String email;
 
 }
 

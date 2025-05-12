@@ -3,10 +3,10 @@ package com.example.taskmanager.controller;
 import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController //데이터를 json형태로 사용
@@ -20,36 +20,36 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-
-    @PostMapping("/tasks") // 요청
-    public ResponseEntity<TaskResponseDto> createTask(@RequestBody TaskRequestDto taskRequestDto) {
-        //@RequestBody가 클라이언트가 보낸 JSON(비밀번호, 이름, 일정) 받아옴
-        //저장
-        TaskResponseDto taskResponseDto = taskService.saveTask(taskRequestDto);
-        return new ResponseEntity<>(taskResponseDto, HttpStatus.CREATED);
+    @PostMapping("/users/{userId}/tasks") // 요청
+    public ResponseEntity<String> createUser(@PathVariable long userId, @Valid @RequestBody TaskRequestDto taskRequestDto) {
+        taskService.createTask(userId, taskRequestDto);
+        return new ResponseEntity<>("일정을 생성했습니다.", HttpStatus.CREATED);
     }
 
-    @GetMapping("/tasks")
-    public ResponseEntity<List<TaskResponseDto>> readAllTasks(){
-        return new ResponseEntity<>(taskService.readAllTasks(), HttpStatus.OK);
+    @GetMapping("/users/{userId}/tasks")
+    public ResponseEntity<List<TaskResponseDto>> readAllTasks(@PathVariable long userId){
+        List<TaskResponseDto> taskList = taskService.readAllTasks(userId);
+        if(taskList.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(taskList, HttpStatus.OK);
     }
 
-    @GetMapping("/tasks/{taskId}")
-    public ResponseEntity<TaskResponseDto> readTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto){
-        TaskResponseDto taskResponseDto = taskService.readTask(taskId, taskRequestDto);
+    @GetMapping("/users/{userId}/tasks/{taskId}")
+    public ResponseEntity<TaskResponseDto> readTask(@PathVariable long userId, @PathVariable long taskId, @RequestBody TaskRequestDto taskRequestDto){
+        TaskResponseDto taskResponseDto = taskService.readTask(userId, taskId, taskRequestDto);
         return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
     }
 
-    @PutMapping("/tasks/{taskId}")
-    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto){
-        TaskResponseDto taskResponseDto = taskService.updateTask(taskId, taskRequestDto);
-        return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
+    @PutMapping("/users/{userId}/tasks/{taskId}")
+    public ResponseEntity<String> updateTask(@PathVariable long taskId, @RequestBody TaskRequestDto taskRequestDto){
+        taskService.updateTask(taskId, taskRequestDto);
+        return new ResponseEntity<>("일정을 수정했습니다.", HttpStatus.OK);
     }
 
-    @DeleteMapping("/tasks/{taskId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @RequestBody TaskRequestDto taskRequestDto) {
-        taskService.deleteTask(taskId, taskRequestDto);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/users/{userId}/tasks/{taskId}")
+    public ResponseEntity<String> deleteTask(@PathVariable long taskId, @RequestBody TaskRequestDto taskRequestDto){
+        if(taskService.deleteTask(taskId, taskRequestDto) == 0)
+            return new ResponseEntity<>("해당 데이터를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("일정을 삭제했습니다.", HttpStatus.OK);
     }
-
 }
