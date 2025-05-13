@@ -27,8 +27,8 @@ public class TaskController {
     }
 
     @GetMapping("/users/{userId}/tasks")
-    public ResponseEntity<List<TaskResponseDto>> readAllTasks(@PathVariable long userId){
-        List<TaskResponseDto> taskList = taskService.readAllTasks(userId);
+    public ResponseEntity<List<TaskResponseDto>> readAllTasks(@PathVariable long userId, @RequestParam(defaultValue = "1") int pageNumber){
+        List<TaskResponseDto> taskList = taskService.readAllTasks(userId, pageNumber);
         if(taskList.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(taskList, HttpStatus.OK);

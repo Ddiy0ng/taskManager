@@ -50,17 +50,12 @@ public class UserRepository {
     }
 
     private RowMapper<User> userRowMapper(){
-        return new RowMapper<User>() {
-            @Override
-            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new User(
-                        rs.getLong("userId"),
-                        rs.getString("userName"),
-                        rs.getString("email"),
-                        rs.getTimestamp("postDate"),
-                        rs.getTimestamp("updateDate")
-                );
-            }
-        };
+        return (rs, rowNum) -> new User(
+                rs.getLong("userId"),
+                rs.getString("userName"),
+                rs.getString("email"),
+                rs.getTimestamp("postDate"),
+                rs.getTimestamp("updateDate")
+        );
     }
 }

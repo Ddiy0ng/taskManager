@@ -3,6 +3,7 @@ package com.example.taskmanager.service;
 import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.dto.UserResponseDto;
+import com.example.taskmanager.entity.Paging;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.errorHandler.ErrorHandler;
 import com.example.taskmanager.repository.TaskRepository;
@@ -10,14 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service        //@Component와 동일, SpringBean으로 등록한다는 뜻
 public class TaskService {
-
+    private Paging paging;
     private final TaskRepository taskRepository;
     private final ErrorHandler errorHandler;
     private final JdbcTemplate jdbcTemplate;
@@ -31,9 +31,11 @@ public class TaskService {
         taskRepository.createTask(userId, taskRequestDto);
     }
 
-    public List<TaskResponseDto> readAllTasks(long userId){
+    public List<TaskResponseDto> readAllTasks(long userId, int pageNumber){
         List<Task> taskList = taskRepository.readAllTasks(userId);
-        List<TaskResponseDto> responseTaskList = taskList.stream().map(task -> new TaskResponseDto(task)).collect(Collectors.toList());
+        paging = new Paging(pageNumber, taskList);
+        List<Task> pageTaskList = paging.slicePageData();
+        List<TaskResponseDto> responseTaskList = pageTaskList.stream().map(task -> new TaskResponseDto(task)).collect(Collectors.toList());
         return responseTaskList;
     }
 
