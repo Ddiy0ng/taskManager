@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class User {
     //일정 객체
-    private Long userId;
+    private long userId;
     private String userName;
     private String email;
     private Timestamp postDate;

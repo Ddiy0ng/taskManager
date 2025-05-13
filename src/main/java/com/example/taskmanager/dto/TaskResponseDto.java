@@ -3,14 +3,13 @@ package com.example.taskmanager.dto;
 import com.example.taskmanager.entity.Task;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @AllArgsConstructor //조회 시
 public class TaskResponseDto {
-    private Long taskId;
+    private long taskId;
     private String userName;
     private String tasks;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

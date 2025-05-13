@@ -3,7 +3,6 @@ package com.example.taskmanager.dto;
 import com.example.taskmanager.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-
 import java.sql.Timestamp;
 
 @Getter

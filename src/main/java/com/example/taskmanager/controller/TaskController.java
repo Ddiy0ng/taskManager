@@ -21,7 +21,7 @@ public class TaskController {
     }
 
     @PostMapping("/users/{userId}/tasks") // 요청
-    public ResponseEntity<String> createUser(@PathVariable long userId, @Valid @RequestBody TaskRequestDto taskRequestDto) {
+    public ResponseEntity<String> createTask(@PathVariable long userId, @Valid @RequestBody TaskRequestDto taskRequestDto) {
         taskService.createTask(userId, taskRequestDto);
         return new ResponseEntity<>("일정을 생성했습니다.", HttpStatus.CREATED);
     }
@@ -29,8 +29,6 @@ public class TaskController {
     @GetMapping("/users/{userId}/tasks")
     public ResponseEntity<List<TaskResponseDto>> readAllTasks(@PathVariable long userId, @RequestParam(defaultValue = "1") int pageNumber){
         List<TaskResponseDto> taskList = taskService.readAllTasks(userId, pageNumber);
-        if(taskList.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(taskList, HttpStatus.OK);
     }
 

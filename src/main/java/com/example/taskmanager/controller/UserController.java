@@ -28,25 +28,23 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<UserResponseDto>> readAllUsers(){
         List<UserResponseDto> userList = userService.readAllUsers();
-        if(userList.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<UserResponseDto> readUser(@PathVariable Long userId){
+    public ResponseEntity<UserResponseDto> readUser(@PathVariable long userId){
         UserResponseDto userResponseDto = userService.readUser(userId);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<String> updateUser(@PathVariable Long userId, @Valid@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<String> updateUser(@PathVariable long userId, @Valid@RequestBody UserRequestDto userRequestDto){
         userService.updateUser(userId, userRequestDto);
         return new ResponseEntity<>("유저 데이터를 수정했습니다", HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable long userId) {
         if(userService.deleteUser(userId) == 0)
             return new ResponseEntity<>("해당 ID의 데이터를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>("유저 데이터를 삭제했습니다.", HttpStatus.OK);

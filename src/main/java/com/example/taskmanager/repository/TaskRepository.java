@@ -1,22 +1,14 @@
 package com.example.taskmanager.repository;
 import com.example.taskmanager.dto.TaskRequestDto;
-import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.entity.Task;
-import com.example.taskmanager.entity.User;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository        //@Component와 동일, SpringBean으로 등록한다는 뜻
 public class TaskRepository {

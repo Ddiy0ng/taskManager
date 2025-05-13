@@ -5,7 +5,6 @@ import com.example.taskmanager.dto.UserResponseDto;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,19 +29,19 @@ public class UserService {
     }
 
     //read
-    public UserResponseDto readUser(Long userId){
+    public UserResponseDto readUser(long userId){
         User resultUser = userRepository.readUser(userId);
         UserResponseDto resultUserDto = new UserResponseDto(resultUser);
         return resultUserDto;
     }
 
     //update
-    public void updateUser(Long userId, UserRequestDto userRequestDto){
+    public void updateUser(long userId, UserRequestDto userRequestDto){
         userRepository.updateUser(userId, userRequestDto);
     }
 
     //delete
-    public int deleteUser(Long userId){
+    public int deleteUser(long userId){
         return userRepository.deleteUser(userId);
     }
 }

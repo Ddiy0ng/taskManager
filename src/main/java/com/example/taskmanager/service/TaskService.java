@@ -2,16 +2,12 @@ package com.example.taskmanager.service;
 
 import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
-import com.example.taskmanager.dto.UserResponseDto;
 import com.example.taskmanager.entity.Paging;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.errorHandler.ErrorHandler;
 import com.example.taskmanager.repository.TaskRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.stream.Collectors;
 
