@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskRequestDto {
+    //Task 요청용
     @NotBlank
     private String password;
     @NotBlank

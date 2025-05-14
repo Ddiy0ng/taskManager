@@ -3,6 +3,8 @@ package com.example.taskmanager.entity;
 import java.util.List;
 
 public class Paging {
+    //페이지에 따라 서브리스트를 만들어내는 용
+
     private int pageNumber;
     private int pageSize = 5;
     private int offset;

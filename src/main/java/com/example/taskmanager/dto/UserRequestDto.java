@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDto {
+    //User 요청용
     @NotBlank
     private String userName;
     @NotBlank

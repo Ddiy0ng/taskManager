@@ -15,35 +15,35 @@ public class TaskController {
     //요청, 응답 담당
 
     private final TaskService taskService;
-
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    @PostMapping("/users/{userId}/tasks") // 요청
+    //생성
+    @PostMapping("/users/{userId}/tasks")
     public ResponseEntity<String> createTask(@PathVariable long userId, @Valid @RequestBody TaskRequestDto taskRequestDto) {
         taskService.createTask(userId, taskRequestDto);
         return new ResponseEntity<>("일정을 생성했습니다.", HttpStatus.CREATED);
     }
-
+    //전체 조회
     @GetMapping("/users/{userId}/tasks")
     public ResponseEntity<List<TaskResponseDto>> readAllTasks(@PathVariable long userId, @RequestParam(defaultValue = "1") int pageNumber){
         List<TaskResponseDto> taskList = taskService.readAllTasks(userId, pageNumber);
         return new ResponseEntity<>(taskList, HttpStatus.OK);
     }
-
+    //단건 조회
     @GetMapping("/users/{userId}/tasks/{taskId}")
     public ResponseEntity<TaskResponseDto> readTask(@PathVariable long userId, @PathVariable long taskId, @RequestBody TaskRequestDto taskRequestDto){
         TaskResponseDto taskResponseDto = taskService.readTask(userId, taskId, taskRequestDto);
         return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
     }
-
+    //수정
     @PutMapping("/users/{userId}/tasks/{taskId}")
     public ResponseEntity<String> updateTask(@PathVariable long taskId, @RequestBody TaskRequestDto taskRequestDto){
         taskService.updateTask(taskId, taskRequestDto);
         return new ResponseEntity<>("일정을 수정했습니다.", HttpStatus.OK);
     }
-
+    //삭제
     @DeleteMapping("/users/{userId}/tasks/{taskId}")
     public ResponseEntity<String> deleteTask(@PathVariable long taskId, @RequestBody TaskRequestDto taskRequestDto){
         if(taskService.deleteTask(taskId, taskRequestDto) == 0)

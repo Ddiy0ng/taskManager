@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 public class User {
-    //일정 객체
+    //사용지 객체
     private long userId;
     private String userName;
     private String email;

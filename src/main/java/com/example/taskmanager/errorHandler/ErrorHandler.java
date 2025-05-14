@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class ErrorHandler {
-
+    //비밀번호 검증용 메서드
     public void passwordCheck(TaskRequestDto taskRequestDto, JdbcTemplate jdbcTemplate, long taskId){
         String savedPassword = jdbcTemplate.queryForObject("select password from schedule where taskId = ?", String.class, taskId);
         String inputPassword = taskRequestDto.getPassword();

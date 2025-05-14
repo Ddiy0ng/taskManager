@@ -7,8 +7,9 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@AllArgsConstructor //조회 시
+@AllArgsConstructor
 public class TaskResponseDto {
+    //Task 응답용
     private long taskId;
     private String userName;
     private String tasks;
@@ -17,7 +18,6 @@ public class TaskResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Timestamp updateDate;
 
-    //dto 반환
     public TaskResponseDto(Task task) {
         this.taskId = task.getTaskId();
         this.userName = task.getUserName();
